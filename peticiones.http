@@ -1,0 +1,85 @@
+
+#### Loggin POST
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "test@gmail.com",
+    "password": "Test_778"
+}
+
+### Get all post
+GET http://localhost:4000/api/post
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJiYTk4NWRkLWY2NjgtNGMxNi04MzAyLTk4ODgwYzZhYWE5ZSIsImlhdCI6MTcxMTMxMTg5MywiZXhwIjoxNzExMzE5MDkzfQ.GMX01XggYXE5FhlfZXQsW3uHkYLVwUtzz2zsKouCTZk
+
+
+### Create post
+POST http://localhost:4000/api/post/
+Content-Type: application/json
+
+{
+    "title": "Post 1",
+    "content": "Content post 1"
+}
+
+### Crear task rute post
+POST http://localhost:4000/api/post/04168e3b-5d8c-4ad8-bc4a-aef38e789241/task
+Content-Type: application/json
+
+{
+    "name": "fea",
+    "description": "fea",
+    "taskStatus": "pending"
+}
+
+### Get task by post id that belongs to a post
+GET http://localhost:4000/api/post/04168e3b-5d8c-4ad8-bc4a-aef38e789241/task/f481d571-1df5-4984-9b77-6f25193e67bf
+
+### Get post by id
+GET http://localhost:4000/api/post/04168e3b-5d8c-4ad8-bc4a-aef38e789241
+
+### Get the task that belongs to a post
+GET http://localhost:4000/api/post/e9d5d907-3685-4ac0-8200-c3eab8306676/task
+
+### Delete task that belongs to a post by id
+DELETE http://localhost:4000/api/post/04168e3b-5d8c-4ad8-bc4a-aef38e789241/task/f3ec0824-6ba2-4158-95ee-a31ae48c1079
+
+### Update task that belongs to a post by id
+PATCH http://localhost:4000/api/post/e9d5d907-3685-4ac0-8200-c3eab8306676/task/3e9e7b08-6596-4bea-833c-678bb79f87fd
+Content-Type: application/json
+
+{
+    "name": "test soy sergioff ",
+    "description": "Ale come pito mio",
+    "taskStatus": "pending"
+}
+
+
+### Update task status that belongs to a post by id
+PATCH http://localhost:4000/api/post/e9d5d907-3685-4ac0-8200-c3eab8306676/task/13c976b6-c37d-446d-97e4-0d19d872520e/status
+Content-Type: application/json
+
+{
+    "name": "test soy sergio ",
+    "taskStatus": "completed"
+}
+
+
+### Task 
+GET http://localhost:4000/api/task
+
+### Create Task
+POST http://localhost:4000/api/task/04168e3b-5d8c-4ad8-bc4a-aef38e789241
+Content-Type: application/json
+
+{
+    "name": "test",
+    "description": "Ale come pito mio",
+    "taskStatus": "pending"
+}
+
+### Get Task by id
+GET http://localhost:4000/api/task/13c976b6-c37d-446d-97e4-0d19d872520e
+
+###  Ejecutar Seed
+GET http://localhost:4000/api/seed
