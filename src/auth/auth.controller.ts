@@ -29,4 +29,11 @@ export class AuthController {
   ) {
     return this.authService.checkAuthStatus(user);
   }
+
+
+  @Get('user')
+  @Auth()
+  getAuthUser(@GetUser() user: User) {
+    return this.authService.getAuthUser(user);
+  }
 }

@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { transport } from 'src/config/nodemailer';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { JwtPayload } from './interfaces/jwt-payload.inteface';
@@ -9,6 +10,16 @@ import { User } from '@prisma/client';
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private readonly jwtService: JwtService) { }
+
+  getAuthUser(user : User){
+    try {
+      return user;
+    } catch (error) {
+      this.handelError(error);
+    }
+  }
+
+
   async login(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
     email.toLowerCase().trim();
@@ -41,6 +52,12 @@ export class AuthService {
     };
   }
 
+  // * Este método crea un nuevo usuario
+  /**
+   *  This method creates a new user  
+   * @param createUserDto This is the data to be used in creating a new user
+   * @returns returns a message and the user data
+   */
   async create(createUserDto: CreateUserDto) {
     try {
       createUserDto.password = await bcrypt.hashSync(createUserDto.password, 10);
@@ -75,7 +92,7 @@ export class AuthService {
     }
   }
 
-    async checkAuthStatus( user: User ){
+  async checkAuthStatus( user: User ){
     return {
       ...user,
       token: this.getJwtToken({ id: user.id })

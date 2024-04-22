@@ -4,8 +4,19 @@ POST http://localhost:4000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "test@gmail.com",
-    "password": "Test_778"
+    "email": "sergitoabruzos@gmail.com",
+    "password": "78_Pedillos"
+}
+
+
+#### Register POST
+POST http://localhost:4000/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "Sergio",
+    "email": "sergitoabruzos@gmail.com",
+    "password": "78Pedillos_"
 }
 
 ### Get all post
@@ -15,6 +26,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJiYTk4NWRkL
 
 ### Create post
 POST http://localhost:4000/api/post/
+Authorization: Bearer 
 Content-Type: application/json
 
 {

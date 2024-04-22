@@ -22,6 +22,10 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   roles       String[] @default(["user"])
+  project     Post[]   @relation("UserPosts")
+  team        Post?   @relation("PostTeam", fields: [teamId], references: [id])
+  teamId      String?
+  completedTasks Task[] @relation("UserTasks")
 }
 
 model Post {
@@ -32,6 +36,10 @@ model Post {
   tasks      Task[]   @relation("PostTasks")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  manager    User     @relation("UserPosts", fields: [managerId], references: [id])
+  managerId  String   
+  team       User[]   @relation("PostTeam")
+
 }
 
 enum TaskStatus {
@@ -51,4 +59,6 @@ model Task {
   taskStatus  TaskStatus @default(pending)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  completedBy User? @relation("UserTasks", fields: [completedById], references: [id])
+  completedById String?
 }
