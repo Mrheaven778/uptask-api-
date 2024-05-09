@@ -372,6 +372,9 @@ export class PostService {
       where: {
         postId: idPost,
       },
+      include: {
+        completedBy: true,
+      }
     });
     return tasks;
   }

@@ -14,18 +14,19 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(uuid())
-  email       String   @unique
-  username    String?
-  password    String
-  isActivated Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  roles       String[] @default(["user"])
-  project     Post[]   @relation("UserPosts")
-  team        Post?   @relation("PostTeam", fields: [teamId], references: [id])
-  teamId      String?
-  completedTasks Task[] @relation("UserTasks")
+  id             String   @id @default(uuid())
+  email          String   @unique
+  username       String?
+  password       String
+  isActivated    Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  roles          String[] @default(["user"])
+  project        Post[]   @relation("UserPosts")
+  team           Post?    @relation("PostTeam", fields: [teamId], references: [id])
+  teamId         String?
+  completedTasks Task[]   @relation("UserTasks")
+  notes          Note[]   @relation("UserNotes")
 }
 
 model Post {
@@ -37,13 +38,12 @@ model Post {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   manager    User     @relation("UserPosts", fields: [managerId], references: [id])
-  managerId  String   
+  managerId  String
   team       User[]   @relation("PostTeam")
-
 }
 
 enum TaskStatus {
-  pending 
+  pending
   onHold
   inProgress
   underReview
@@ -51,14 +51,26 @@ enum TaskStatus {
 }
 
 model Task {
+  id            String     @id @default(uuid())
+  name          String
+  description   String
+  post          Post       @relation("PostTasks", fields: [postId], references: [id])
+  postId        String
+  taskStatus    TaskStatus @default(pending)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  completedBy   User?      @relation("UserTasks", fields: [completedById], references: [id])
+  completedById String?
+  notes         Note[]     @relation("TasksNotes")
+}
+
+model Note {
   id          String   @id @default(uuid())
-  name        String  
-  description String
-  post        Post     @relation("PostTasks", fields: [postId], references: [id])
-  postId      String
-  taskStatus  TaskStatus @default(pending)
+  content     String
+  createdBy   User     @relation("UserNotes", fields: [createdById], references: [id])
+  createdById String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  completedBy User? @relation("UserTasks", fields: [completedById], references: [id])
-  completedById String?
+  task        Task     @relation("TasksNotes", fields: [taskId], references: [id])
+  taskId      String
 }

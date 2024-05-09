@@ -6,7 +6,7 @@ import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
 export class TaskService {
   constructor(private readonly prisma: PrismaService) { }
-  
+
   async create(createTaskDto: CreateTaskDto, postId: string) {
     // check if the post exists
     const post = await this.prisma.post.findUnique({
@@ -36,7 +36,6 @@ export class TaskService {
         post: true,
       },
     });
-    ;
   }
 
   async findOne(id: string) {
@@ -46,7 +45,7 @@ export class TaskService {
         id: id,
       },
       include: {
-        post: true,
+        completedBy: true,
       }
     });
     if (!task) {
