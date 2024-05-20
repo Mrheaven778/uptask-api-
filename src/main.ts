@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 
 async function bootstrap() {
   dotenv.config();
+  const PORT = process.env.PORT || 4000;
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api');  
@@ -21,6 +22,6 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
-  await app.listen(4000);
+  await app.listen(PORT);
 }
 bootstrap();
