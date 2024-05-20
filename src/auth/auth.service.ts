@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { transport } from 'src/config/nodemailer';
 import * as bcrypt from 'bcrypt';
@@ -9,9 +14,12 @@ import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private readonly jwtService: JwtService) { }
+  constructor(
+    private prisma: PrismaService,
+    private readonly jwtService: JwtService,
+  ) {}
 
-  getAuthUser(user : User){
+  getAuthUser(user: User) {
     try {
       return user;
     } catch (error) {
@@ -19,19 +27,18 @@ export class AuthService {
     }
   }
 
-
   async login(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
     email.toLowerCase().trim();
     const user = await this.prisma.user.findUnique({
       where: {
-        email: email
+        email: email,
       },
       select: {
         id: true,
         email: true,
         password: true,
-      }
+      },
     });
     if (!user) {
       throw new UnauthorizedException('The email does not exist');
@@ -41,65 +48,66 @@ export class AuthService {
     }
     return {
       message: 'Login successful',
-      data:{
+      data: {
         token: this.getJwtToken({
-          id: user.id
+          id: user.id,
         }),
         id: user.id,
         email: loginUserDto.email,
-        password: loginUserDto.password
-      }
+        password: loginUserDto.password,
+      },
     };
   }
 
   // * Este método crea un nuevo usuario
   /**
-   *  This method creates a new user  
+   *  This method creates a new user
    * @param createUserDto This is the data to be used in creating a new user
    * @returns returns a message and the user data
    */
   async create(createUserDto: CreateUserDto) {
     try {
-      createUserDto.password = await bcrypt.hashSync(createUserDto.password, 10);
+      createUserDto.password = await bcrypt.hashSync(
+        createUserDto.password,
+        10,
+      );
       createUserDto.email = createUserDto.email.toLowerCase().trim();
 
       const user = await this.prisma.user.create({
         data: {
           email: createUserDto.email,
           username: createUserDto.username,
-          password: createUserDto.password
+          password: createUserDto.password,
         },
         select: {
           id: true,
           email: true,
-          username: true
-        }
+          username: true,
+        },
       });
 
       return {
         message: 'User created successfully',
         data: {
           token: this.getJwtToken({
-            id: user.id
+            id: user.id,
           }),
           email: createUserDto.email,
           username: createUserDto.username,
-          id: createUserDto.id
-        }
+          id: createUserDto.id,
+        },
       };
     } catch (error) {
       this.handelError(error);
     }
   }
 
-  async checkAuthStatus( user: User ){
+  async checkAuthStatus(user: User) {
     return {
       ...user,
-      token: this.getJwtToken({ id: user.id })
+      token: this.getJwtToken({ id: user.id }),
     };
-
   }
-
 
   // metodos privados
   /**
@@ -109,7 +117,6 @@ export class AuthService {
   private getJwtToken(payload: JwtPayload) {
     const token = this.jwtService.sign(payload);
     return token;
-
   }
 
   /**

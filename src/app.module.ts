@@ -6,9 +6,10 @@ import { PostModule } from './post/post.module';
 import { SeedModule } from './seed/seed.module';
 import { TaskModule } from './task/task.module';
 import { NoteModule } from './note/note.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [AuthModule, PostModule, SeedModule, TaskModule, NoteModule],
+  imports: [AuthModule, PostModule, SeedModule, TaskModule, NoteModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })
