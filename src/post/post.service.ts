@@ -352,31 +352,30 @@ export class PostService {
    * @throws BadRequestException if the post with the given ID is not found.
    */
   async getTask(idPost: string, user: User) {
-    const userExists = await this.prisma.user.findUnique({
-      where: {
-        id: user.id,
-      },
-    });
-    // check if the post exists
-    const post = await this.prisma.post.findUnique({
-      where: {
-        id: idPost,
-        managerId: user.id,
-      },
-    });
-    if (!post) {
-      throw new BadRequestException(`Post with ID ${idPost} not found`);
-    }
-    // get this project tasks
-    const tasks = await this.prisma.task.findMany({
-      where: {
-        postId: idPost,
-      },
-      include: {
-        completedBy: true,
+    try {
+      const post = await this.prisma.post.findUnique({
+        where: {
+          id: idPost,
+          // managerId: user.id,
+        },
+      });
+      if (!post) {
+        throw new BadRequestException(`Post with ID ${idPost} not found`);
       }
-    });
-    return tasks;
+      // get this project tasks
+      const tasks = await this.prisma.task.findMany({
+        where: {
+          postId: idPost,
+        },
+        include: {
+          completedBy: true,
+        }
+      });
+      return tasks;
+      
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   /**
