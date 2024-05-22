@@ -107,7 +107,7 @@ export class PostController {
 
   // * Get all task from a project
   @Get(':idPost/task')
-  //@Auth()
+  @Auth()
   getTask(@Param('idPost') idPost: string, @GetUser() user: User) {
     return this.postService.getTask(idPost, user);
   }
